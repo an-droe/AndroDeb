@@ -33,7 +33,7 @@ If you plan to install the **Full Desktop (XFCE)**, you must install the **Termu
 Open Termux and run the following command to download and start the installation immediately:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/an-droe/AndroDeb/refs/heads/main/install.sh | bash
+curl -sLO https://raw.githubusercontent.com/an-droe/AndroDeb/refs/heads/main/install.sh && chmod +x install.sh && ./install.sh
 ```
 
 > **Note:** Make sure to grant storage permissions to Termux if prompted. The script requires at least ~500MB for CLI and ~4GB for the GUI.
