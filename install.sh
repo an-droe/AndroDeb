@@ -30,11 +30,11 @@ echo -e "${C_BOLD}${C_CYAN}   Select installation type:${C_RESET}"
 echo -e "   ${C_BOLD}${C_CYAN}1)${C_RESET} CLI Only (Minimal, ~500MB required)"
 echo -e "   ${C_BOLD}${C_CYAN}2)${C_RESET} Full Desktop (XFCE + Termux-X11, ~4GB required) [Default]"
 echo -e -n "   ${C_CYAN}Option [1/2]: ${C_RESET}"
-read INSTALL_TYPE
+read INSTALL_TYPE </dev/tty
 INSTALL_TYPE=${INSTALL_TYPE:-2}
 
 echo -e -n "\n${C_BOLD}${C_CYAN}   Do you want to continue with the installation? (y/N): ${C_RESET}"
-read CONFIRMATION
+read CONFIRMATION </dev/tty
 
 if [[ "$CONFIRMATION" != "y" && "$CONFIRMATION" != "Y" ]]; then
     echo -e "\n${C_YELLOW}❌ Installation cancelled. See you later! 😊${C_RESET}"
@@ -43,7 +43,7 @@ fi
 
 echo -e "\n${C_BLUE}${C_BOLD}👤 USER CONFIGURATION${C_RESET}"
 echo -e -n "${C_BOLD}${C_CYAN}   Enter a username for the new system [Default: droid]: ${C_RESET}"
-read USERNAME
+read USERNAME </dev/tty
 USERNAME=${USERNAME:-droid}
 
 # Get Android Timezone
@@ -138,7 +138,7 @@ if [ "$INSTALL_TYPE" == "2" ]; then
     DEBIAN_PACKAGES="$DEBIAN_PACKAGES task-xfce-desktop dbus-x11"
 fi
 
-# Pass variables to Debian using double quotes
+# Pass variables to Debian using double quotes, redirecting input from /dev/tty for password prompt
 proot-distro login debian --shared-tmp -- bash -c "
 # Prevent interactive prompts during apt install
 export DEBIAN_FRONTEND=noninteractive
@@ -176,21 +176,11 @@ sleep 1
 export PULSE_SERVER=127.0.0.1
 export DISPLAY=:0
 
-# GPU Acceleration Config (experimental for Adreno)
-#export MESA_NO_ERROR=1
-#export MESA_GL_VERSION_OVERRIDE=4.6
-#export MESA_GLES_VERSION_OVERRIDE=3.2
-#export GALLIUM_DRIVER=freedreno
-#export MESA_LOADER_DRIVER_OVERRIDE=kgsl
-#export TU_DEBUG=noconform
-#export MESA_VK_WSI_PRESENT_MODE=immediate
-#export ZINK_DESCRIPTORS=lazy
-
 exec startxfce4
 EOF2
     chmod +x /usr/local/bin/run-x11
 fi
-"
+" </dev/tty
 
 # ==========================================
 # FINAL SCREEN
